@@ -12,9 +12,6 @@
 - [Usage](#usage)
 - [Project Structure](#project-structure)
 - [Technologies Used](#technologies-used)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgments](#acknowledgments)
 - [Contact](#contact)
 
 ## Features
@@ -57,41 +54,33 @@ _Easily create new tasks with due dates and categories._
 
 1. **Clone the repository**
     
-    bash
+    ```bash
+       git clone https://github.com/yourusername/tasky.git cd tasky
+    ```
     
-    Копировать код
-    
-    `git clone https://github.com/yourusername/tasky.git cd tasky`
-    
-2. **Set up the database**
+3. **Set up the database**
     
     - Create a MySQL database named `tasky_db`.
         
     - Update the `application.properties` file with your database credentials.
         
-        properties
+        ```
+        spring.datasource.url=jdbc:mysql://localhost:3306/tasky_db?useSSL=false&serverTimezone=UTC
+        spring.datasource.username=your_mysql_username
+        spring.datasource.password=your_mysql_password
+        ```
         
-        Копировать код
-        
-        `spring.datasource.url=jdbc:mysql://localhost:3306/tasky_db?useSSL=false&serverTimezone=UTC spring.datasource.username=your_mysql_username spring.datasource.password=your_mysql_password`
-        
-3. **Build the project**
+4. **Build the project**
+    ```bash
+       mvn clean install
+    ```
+5. **Run the application**
     
-    bash
+    ```bash
+       mvn spring-boot:run
+    ```
     
-    Копировать код
-    
-    `mvn clean install`
-    
-4. **Run the application**
-    
-    bash
-    
-    Копировать код
-    
-    `mvn spring-boot:run`
-    
-5. **Access the application**
+6. **Access the application**
     
     - Open your browser and navigate to `http://localhost:8080`.
 
@@ -120,7 +109,7 @@ _Easily create new tasks with due dates and categories._
 ## Project Structure
 
 - **src/main/java/com/tasky**
-    - **models**: Entity classes (`User`, `Task`, `Category`).
+    - **models**: Entity classes (User, Task, Category).
     - **repositories**: Interfaces for database operations.
     - **services**: Business logic for handling operations.
     - **controllers**: Request handling and routing.
@@ -144,51 +133,22 @@ _Easily create new tasks with due dates and categories._
 
 ## Contributing
 
-Contributions are welcome! Here's how you can help:
-
-1. **Fork the repository**
-    
-2. **Create a new branch**
-    
-    bash
-    
-    Копировать код
-    
-    `git checkout -b feature/your-feature-name`
-    
-3. **Make your changes**
-    
-4. **Commit your changes**
-    
-    bash
-    
-    Копировать код
-    
-    `git commit -am 'Add new feature'`
-    
-5. **Push to the branch**
-    
-    bash
-    
-    Копировать код
-    
-    `git push origin feature/your-feature-name`
-    
-6. **Create a new Pull Request**
-    
+Contributions are welcome!
 
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Acknowledgments
+
+
+
 
 - Thanks to the [Spring](https://spring.io/) community for their excellent resources and support.
-- Inspired by the need for a simple and efficient task management tool.
+
 
 ## Contact
 
 Feel free to reach out for any questions or suggestions:
 
-- **Email**: your.email@example.com
-- **GitHub**: [yourusername](https://github.com/yourusername)
+- **Email**: vkupin@neoflex.ru
+- **GitHub**: [yourusername](https://github.com/xin3c)
