@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Tasky - Tasks</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<!-- Navigation Bar -->
+<div class="navbar">
+  <a th:href="@{/tasks}">Tasks</a>
+  <a th:href="@{/categories}">Categories</a>
+  <a th:href="@{/logout}">Logout</a>
+</div>
+
+<div class="container">
+  <h1>Your Tasks</h1>
+  <a th:href="@{/tasks/new}">
+    <button>Create New Task</button>
+  </a>
+
+  <!-- Task Table -->
+  <table>
+    <thead>
+    <tr>
+      <th>Title</th>
+      <th>Status</th>
+      <th>Due Date</th>
+      <th>Category</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="task : ${tasks}">
+      <td th:text="${task.title}">Task Title</td>
+      <td th:text="${task.completed ? 'Completed' : 'Not Completed'}">Status</td>
+      <td th:text="${task.dueDate != null} ? ${#temporals.format(task.dueDate, 'yyyy-MM-dd')} : 'N/A'">Due Date</td>
+      <td th:text="${task.category != null} ? ${task.category.name} : 'Uncategorized'">Category</td>
+      <td>
+        <a th:href="@{'/tasks/edit/' + ${task.id}}">Edit</a> |
+        <a th:href="@{'/tasks/delete/' + ${task.id}}">Delete</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  &copy; 2023 Tasky. All rights reserved.
+</div>
+</body>
+</html>
