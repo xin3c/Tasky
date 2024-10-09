@@ -3,10 +3,13 @@ package com.tasky.controllers;
 import com.tasky.models.User;
 import com.tasky.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  * Controller for authentication and registration.
@@ -42,19 +45,30 @@ public class AuthController {
     }
 
     /**
+     * Processes logout.
+     *
+     * @return lgout call
+     */
+    @GetMapping("/logout")
+    public String logoutUser(Model model) {
+        return "logout";
+    }
+
+    /**
      * Processes the registration form.
      *
      * @param user the user
      * @return redirect to login page
      */
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute("user") User user, Model model) {
+    public String registerUser(@ModelAttribute("user") User user, BindingResult bindingResult) {
         if (userService.usernameExists(user.getUsername())) {
-            model.addAttribute("error", "Username already taken");
-            return "register";
+            bindingResult.rejectValue("username", "error.user", "Username already taken");
         }
         if (userService.emailExists(user.getEmail())) {
-            model.addAttribute("error", "Email already registered");
+            bindingResult.rejectValue("email", "error.user", "Email already registered");
+        }
+        if (bindingResult.hasErrors()) {
             return "register";
         }
         userService.registerUser(user);

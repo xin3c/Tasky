@@ -1,11 +1,17 @@
-<!-- src/main/resources/templates/index.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Tasky - Home</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<h1>Welcome to Tasky</h1>
-<p>Please <a th:href="@{/login}">login</a> or <a th:href="@{/register}">register</a>.</p>
+<div class="container">
+    <h1>Welcome to Tasky</h1>
+    <p>Your personal task management application.</p>
+    <div style="margin-top: 30px;">
+        <a th:href="@{/login}" class="button" style="margin-right: 10px;">Login</a>
+        <a th:href="@{/register}" class="button">Register</a>
+    </div>
+</div>
 </body>
 </html>

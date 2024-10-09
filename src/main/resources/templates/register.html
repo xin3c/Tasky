@@ -2,27 +2,39 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Tasky - Register</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Include Montserrat Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <!-- CSS Stylesheet -->
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<div class="container">
-    <h1>Register</h1>
+<div class="auth-container">
+    <h2>Create an Account</h2>
     <form th:action="@{/register}" th:object="${user}" method="post">
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" th:field="*{username}" id="username" required/>
+        <div>
+            <label>Username:</label>
+            <input type="text" th:field="*{username}" placeholder="Username" />
+            <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
         </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" th:field="*{email}" id="email" required/>
+
+        <div>
+            <label>Email:</label>
+            <input type="email" th:field="*{email}" placeholder="Email" />
+            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
         </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" th:field="*{password}" id="password" required/>
+
+        <div>
+            <label>Password:</label>
+            <input type="password" th:field="*{password}" placeholder="Password" />
+            <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
         </div>
         <button type="submit">Register</button>
     </form>
     <p>Already have an account? <a th:href="@{/login}">Login here</a>.</p>
-</div>
+    <button id="theme-toggle" class="theme-toggle">🌙 Dark Mode</button>
+</div><script th:src="@{/js/theme-toggle.js}"></script>
 </body>
 </html>

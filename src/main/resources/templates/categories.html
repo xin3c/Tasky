@@ -1,10 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+  <title>Tasky - Categories</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
+<!-- Navigation Bar -->
+<div class="navbar">
+  <button id="theme-toggle" class="theme-toggle">🌙 Dark Mode</button>
+  <a th:href="@{/tasks}">Tasks</a>
+  <a th:href="@{/categories}" class="button">Categories</a>
+  <a th:href="@{/logout}">Logout</a>
+</div>
+
+<div class="container">
+  <h2>Your Categories</h2>
+  <div class="actions">
+    <a th:href="@{/categories/new}" class="button">Create New Category</a>
+  </div>
+  <table>
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="category : ${categories}">
+      <td th:text="${category.name}">Category Name</td>
+      <td>
+        <a th:href="@{'/categories/edit/' + ${category.id}}">Edit</a> |
+        <a th:href="@{'/categories/delete/' + ${category.id}}">Delete</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div><script th:src="@{/js/theme-toggle.js}"></script>
 
 </body>
 </html>

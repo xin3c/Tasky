@@ -1,11 +1,12 @@
 package com.tasky.services;
 
+import com.tasky.models.Category;
 import com.tasky.models.Task;
 import com.tasky.models.User;
-import com.tasky.models.Category;
 import com.tasky.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 /**

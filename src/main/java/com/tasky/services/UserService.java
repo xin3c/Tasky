@@ -5,6 +5,7 @@ import com.tasky.repositories.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+
 /**
  * Service class for handling user-related operations.
  */
@@ -17,9 +18,10 @@ public class UserService {
     /**
      * Constructor injection of UserRepository and BCryptPasswordEncoder.
      *
-     * @param userRepository the user repository
+     * @param userRepository  the user repository
      * @param passwordEncoder the password encoder
      */
+
     public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -32,9 +34,7 @@ public class UserService {
      * @return the saved user
      */
     public User registerUser(User user) {
-        // Encrypt the password before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        // Assign default role
         user.getRoles().add("USER");
         return userRepository.save(user);
     }

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Tasky - Create Category</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<!-- Navigation Bar -->
+<div class="navbar">
+  <button id="theme-toggle" class="theme-toggle">🌙 Dark Mode</button>
+  <a th:href="@{/tasks}" >Tasks</a>
+  <a th:href="@{/categories}" class="button">Categories</a>
+  <a th:href="@{/logout}">Logout</a>
+</div>
+
+
+<div class="container">
+  <h2>Create New Category</h2>
+  <form th:action="@{/categories}" th:object="${category}" method="post">
+    <input type="text" th:field="*{name}" placeholder="Category Name" required autofocus/>
+    <button type="submit">Create Category</button>
+  </form>
+</div><script th:src="@{/js/theme-toggle.js}"></script>
+
+</body>
+</html>

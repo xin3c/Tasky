@@ -5,20 +5,21 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<div class="container">
-    <h1>Login</h1>
+<div class="auth-container">
+    <h2>Login to Tasky</h2>
+    <div th:if="${param.logout != null}" class="success-message">
+        <p>You have been logged out successfully.</p>
+    </div>
     <form th:action="@{/login}" method="post">
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required/>
-        </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required/>
+        <input type="text" name="username" placeholder="Username" required autofocus/>
+        <input type="password" name="password" placeholder="Password" required/>
+        <div th:if="${param.error}" class="form-error">
+            Invalid username or password
         </div>
         <button type="submit">Login</button>
     </form>
     <p>Don't have an account? <a th:href="@{/register}">Register here</a>.</p>
-</div>
+    <button id="theme-toggle" class="theme-toggle">🌙 Dark Mode</button>
+</div><script th:src="@{/js/theme-toggle.js}"></script>
 </body>
 </html>

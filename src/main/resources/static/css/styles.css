@@ -1,0 +1,266 @@
+/* styles.css */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
+/* Root Variables for Colors */
+:root {
+    --background-color: #F3F0FF;
+    --text-color: #333333;
+    --navbar-background-color: #330066;
+    --navbar-text-color: #000000;
+    --link-color: #6633CC;
+    --button-background-color: #6633CC;
+    --button-text-color: #FFFFFF;
+    --input-background-color: #FFFFFF;
+    --input-text-color: #333333;
+}
+
+/* Variables for Dark Theme */
+[data-theme="dark"] {
+    --background-color: #1E1E1E;
+    --text-color: #FFFFFF;
+    --navbar-background-color: #000000;
+    --navbar-text-color: #FFFFFF;
+    --link-color: #9966CC;
+    --button-background-color: #6633CC;
+    --button-text-color: #FFFFFF;
+    --input-background-color: #2D2D2D;
+    --input-text-color: #FFFFFF;
+}
+/* Reset default browser styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html {
+    transition: background-color 0.3s, color 0.3s;
+}
+/* Body styling */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Container */
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+.form-error {
+    color: #DD2222;
+    font-size: 14px;
+    margin-top: 14px;
+    text-align: center;
+}
+
+/* Auth Container */
+.auth-container {
+    max-width: 400px;
+    margin: 80px auto;
+    padding: 40px;
+    background-color: var(--background-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(51, 0, 102, 0.1);
+    text-align: center;
+}
+
+.auth-container h2 {
+    color: var(--navbar-text-color);
+    margin-bottom: 30px;
+}
+
+.auth-container form {
+    text-align: left;
+}
+
+.auth-container p {
+    margin-top: 20px;
+    font-size: 14px;
+}
+.theme-toggle {
+    margin-left: auto;
+    cursor: pointer;
+    color: var(--navbar-text-color);
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+}
+/* Headings */
+h1, h2 {
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: var(--navbar-text-color);
+}
+
+/* Navigation Bar */
+.navbar {
+    background-color: var(--navbar-background-color);
+    padding: 15px 0;
+    text-align: center;
+}
+
+
+.navbar a {
+    color: var(--navbar-text-color);;
+    margin: 0 15px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+
+.navbar a:hover {
+    transition: background-color 0.3s ease;
+    text-decoration: underline;
+}
+
+/* Forms */
+form {
+    margin-top: 20px;
+}
+
+form input[type="text"],
+form input[type="password"],
+form input[type="email"],
+form input[type="date"],
+form textarea,
+form select {
+    background-color: var(--input-background-color);
+    color: var(--input-text-color);
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+form input[type="text"]:focus,
+form input[type="password"]:focus,
+form input[type="email"]:focus,
+form input[type="date"]:focus,
+form textarea:focus,
+form select:focus {
+    border-color: var(--link-color);
+    outline: none;
+}
+
+form textarea {
+    height: 120px;
+    resize: vertical;
+}
+
+form button {
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--button-background-color);
+    color: var(--button-text-color);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: var(--navbar-background-color);
+}
+
+form a {
+    color: var(--background-color);
+}
+
+form a:hover {
+    text-decoration: underline;
+}
+
+/* Buttons */
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--button-background-color);
+    color: var(--button-text-color);
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: var(--dark-purple);
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table thread {
+    background-color: var(--medium-purple);
+    color: var(--white-color);
+}
+
+table th, table td {
+    padding: 15px;
+    border-bottom: 1px solid #EEE;
+    text-align: left;
+}
+
+table tr:hover {
+    background-color: --button-background-color;
+}
+
+/* Actions */
+.actions {
+    margin-bottom: 20px;
+}
+
+/* Links */
+a {
+    color: var(--medium-purple);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+    color: #777;
+}
+
+/* Status Labels */
+.status-completed {
+    color: var(--medium-purple);
+    font-weight: 500;
+}
+
+.status-pending {
+    color: var(--error-color);
+    font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .navbar a {
+        display: block;
+        margin: 5px 0;
+    }
+
+    .container, .auth-container {
+        margin: 20px;
+    }
+}

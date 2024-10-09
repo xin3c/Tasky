@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -43,13 +44,14 @@ public class Task {
     /**
      * Date and time when the task was created.
      */
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime creationDate;
 
     /**
      * Due date and time for the task.
      */
-    private LocalDateTime dueDate;
+    @Column(nullable = false, updatable = false)
+    private LocalDate dueDate;
 
     /**
      * User who owns the task.
@@ -70,6 +72,6 @@ public class Task {
      */
     @PrePersist
     protected void onCreate() {
-        creationDate = LocalDateTime.now();
+        this.creationDate = LocalDateTime.now();
     }
 }

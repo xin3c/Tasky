@@ -1,17 +1,19 @@
 package com.tasky.controllers;
 
+import com.tasky.models.Category;
 import com.tasky.models.Task;
 import com.tasky.models.User;
-import com.tasky.models.Category;
-import com.tasky.services.TaskService;
 import com.tasky.services.CategoryService;
+import com.tasky.services.TaskService;
 import com.tasky.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -50,6 +52,7 @@ public class TaskController {
         List<Category> categories = categoryService.getCategoriesByUser(user);
         model.addAttribute("task", new Task());
         model.addAttribute("categories", categories);
+
         return "create_task";
     }
 
@@ -75,6 +78,37 @@ public class TaskController {
     @PostMapping("/{id}/delete")
     public String deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
+        return "redirect:/tasks";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        User user = userService.findUserByUsername(userDetails.getUsername());
+        Task task = taskService.findTaskById(id);
+        LocalDate dueDate = task.getDueDate();
+        if (!task.getUser().equals(user)) {
+            return "redirect:/tasks";
+        }
+        List<Category> categories = categoryService.getCategoriesByUser(user);
+        model.addAttribute("task", task);
+        model.addAttribute("categories", categories);
+        model.addAttribute("dueDate", dueDate);
+
+        return "edit_task";
+    }
+
+    @PostMapping("/update")
+    public String updateTask(@ModelAttribute Task task, @AuthenticationPrincipal UserDetails userDetails) {
+        User user = userService.findUserByUsername(userDetails.getUsername());
+        task.setUser(user);
+        if (task.getCategory() != null && task.getCategory().getId() != null) {
+            Category category = categoryService.findCategoryById(task.getCategory().getId());
+            task.setCategory(category);
+        } else {
+            task.setCategory(null);
+        }
+
+        taskService.saveTask(task);
         return "redirect:/tasks";
     }
 }

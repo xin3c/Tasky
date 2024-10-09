@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Tasky - Create Task</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<!-- Navigation Bar -->
+<div class="navbar">
+  <a th:href="@{/tasks}">Tasks</a>
+  <a th:href="@{/categories}">Categories</a>
+  <a th:href="@{/logout}">Logout</a>
+</div>
+
+<div class="container">
+  <h2>Create New Task</h2>
+  <form th:action="@{/tasks}" th:object="${task}" method="post">
+    <input type="text" th:field="*{title}" placeholder="Title" required autofocus/>
+    <textarea th:field="*{description}" placeholder="Description"></textarea>
+    <input type="date" th:field="*{dueDate}" placeholder="Due Date"/>
+    <select th:field="*{category.id}">
+      <option value="" th:text="'Select Category'"></option>
+      <option th:each="category : ${categories}"
+              th:value="${category.id}"
+              th:text="${category.name}">
+      </option>
+    </select>
+    <button type="submit">Create Task</button>
+  </form>
+</div><script th:src="@{/js/theme-toggle.js}"></script>
+
+</body>
+</html>

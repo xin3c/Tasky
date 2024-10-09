@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Tasky - Edit Task</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<!-- Navigation Bar -->
+<div class="navbar">
+  <button id="theme-toggle" class="theme-toggle">🌙 Dark Mode</button>
+  <a th:href="@{/tasks}" class="button">Tasks</a>
+  <a th:href="@{/categories}">Categories</a>
+  <a th:href="@{/logout}">Logout</a>
+</div>
+
+<div class="container">
+  <h2>Edit Task</h2>
+  <form th:action="@{/tasks/update}" th:object="${task}" method="post">
+    <input type="hidden" th:field="*{id}"/>
+    <input type="text" th:field="*{title}" placeholder="Title" required autofocus/>
+    <textarea th:field="*{description}" placeholder="Description"></textarea>
+    <input type="date" th:field="*{dueDate}" placeholder="Due Date"/>
+    <select th:field="*{category.id}">
+      <option value="" th:text="'Select Category'"></option>
+      <option th:each="category : ${categories}"
+              th:value="${category.id}"
+              th:text="${category.name}"
+              th:selected="${task.category != null} ? ${category.id == task.category.id} : false">
+      </option>
+    </select>
+    <label>
+      <input type="checkbox" th:field="*{completed}"/> Completed
+    </label>
+    <button type="submit">Update Task</button>
+  </form>
+</div><script th:src="@{/js/theme-toggle.js}"></script>
+
+</body>
+</html>

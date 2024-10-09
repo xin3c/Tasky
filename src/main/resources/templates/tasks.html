@@ -7,18 +7,18 @@
 <body>
 <!-- Navigation Bar -->
 <div class="navbar">
-  <a th:href="@{/tasks}">Tasks</a>
+  <button id="theme-toggle" class="theme-toggle">🌙 Dark Mode</button>
+  <a th:href="@{/tasks}" class="button">Tasks</a>
   <a th:href="@{/categories}">Categories</a>
   <a th:href="@{/logout}">Logout</a>
 </div>
 
-<div class="container">
-  <h1>Your Tasks</h1>
-  <a th:href="@{/tasks/new}">
-    <button>Create New Task</button>
-  </a>
 
-  <!-- Task Table -->
+<div class="container">
+  <h2>Your Tasks</h2>
+  <div class="actions">
+    <a th:href="@{/tasks/new}" class="button">Create New Task</a>
+  </div>
   <table>
     <thead>
     <tr>
@@ -32,7 +32,7 @@
     <tbody>
     <tr th:each="task : ${tasks}">
       <td th:text="${task.title}">Task Title</td>
-      <td th:text="${task.completed ? 'Completed' : 'Not Completed'}">Status</td>
+      <td th:text="${task.completed ? 'Completed' : 'Pending'}">Status</td>
       <td th:text="${task.dueDate != null} ? ${#temporals.format(task.dueDate, 'yyyy-MM-dd')} : 'N/A'">Due Date</td>
       <td th:text="${task.category != null} ? ${task.category.name} : 'Uncategorized'">Category</td>
       <td>
@@ -42,11 +42,7 @@
     </tr>
     </tbody>
   </table>
-</div>
+</div><script th:src="@{/js/theme-toggle.js}"></script>
 
-<!-- Footer -->
-<div class="footer">
-  &copy; 2023 Tasky. All rights reserved.
-</div>
 </body>
 </html>
