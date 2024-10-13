@@ -98,7 +98,10 @@ h1, h2 {
     font-weight: 600;
     color: var(--navbar-text-color);
 }
-
+.day h1, h2 {
+    text-align: center;
+    margin-top: 20px;
+}
 /* Navigation Bar */
 .navbar {
     background-color: var(--navbar-background-color);
@@ -203,16 +206,29 @@ table {
     border-collapse: collapse;
     margin-top: 20px;
 }
-
-table thread {
-    background-color: var(--medium-purple);
-    color: var(--white-color);
+.thead. table {
+    margin-bottom: 40px;
 }
+
 
 table th, table td {
     padding: 15px;
     border-bottom: 1px solid #EEE;
     text-align: left;
+}
+
+tr.Low td:first-child{
+    background: linear-gradient(to left, var(--background-color) 90%, #86ff55 10%);
+}
+
+/* Задачи со средним приоритетом */
+tr.Medium td:first-child {
+    background: linear-gradient(to left, var(--background-color) 90%, #ffe03e 10%);
+}
+
+/* Задачи с высоким приоритетом */
+tr.High td:first-child {
+    background: linear-gradient(to left, var(--background-color) 90%, #ff3e3e 10%);
 }
 
 table tr:hover {
@@ -222,6 +238,7 @@ table tr:hover {
 /* Actions */
 .actions {
     margin-bottom: 20px;
+    text-align:center;
 }
 
 /* Links */

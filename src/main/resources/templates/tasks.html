@@ -19,18 +19,23 @@
   <div class="actions">
     <a th:href="@{/tasks/new}" class="button">Create New Task</a>
   </div>
-  <table>
-    <thead>
+  <table class="thead">
     <tr>
-      <th>Title</th>
+      <th>Priority</th>
+      <th>Task Title</th>
       <th>Status</th>
       <th>Due Date</th>
       <th>Category</th>
       <th>Actions</th>
     </tr>
-    </thead>
+  </table>
+  <div class="day">
+  <h2>Today</h2>
+  </div>
+  <table>
     <tbody>
-    <tr th:each="task : ${tasks}">
+    <tr th:each="task : ${todayTasks}" th:class="${task.priority}">
+      <td th:text="${task.priority}">Priority</td>
       <td th:text="${task.title}">Task Title</td>
       <td th:text="${task.completed ? 'Completed' : 'Pending'}">Status</td>
       <td th:text="${task.dueDate != null} ? ${#temporals.format(task.dueDate, 'yyyy-MM-dd')} : 'N/A'">Due Date</td>
@@ -42,6 +47,61 @@
     </tr>
     </tbody>
   </table>
+  <div class="day">
+  <h2>Tomorrow</h2>
+  </div>
+  <table>
+    <tbody>
+    <tr th:each="task : ${tomorrowTasks}" th:class="${task.priority}">
+      <td th:text="${task.priority}">Priority</td>
+      <td th:text="${task.title}">Task Title</td>
+      <td th:text="${task.completed ? 'Completed' : 'Pending'}">Status</td>
+      <td th:text="${task.dueDate != null} ? ${#temporals.format(task.dueDate, 'yyyy-MM-dd')} : 'N/A'">Due Date</td>
+      <td th:text="${task.category != null} ? ${task.category.name} : 'Uncategorized'">Category</td>
+      <td>
+        <a th:href="@{'/tasks/edit/' + ${task.id}}">Edit</a> |
+        <a th:href="@{'/tasks/delete/' + ${task.id}}">Delete</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="day">
+  <h2>On the week</h2>
+  </div>
+  <table>
+    <tbody>
+    <tr th:each="task : ${thisWeekTasks}" th:class="${task.priority}">
+      <td th:text="${task.priority}">Priority</td>
+      <td th:text="${task.title}">Task Title</td>
+      <td th:text="${task.completed ? 'Completed' : 'Pending'}">Status</td>
+      <td th:text="${task.dueDate != null} ? ${#temporals.format(task.dueDate, 'yyyy-MM-dd')} : 'N/A'">Due Date</td>
+      <td th:text="${task.category != null} ? ${task.category.name} : 'Uncategorized'">Category</td>
+      <td>
+        <a th:href="@{'/tasks/edit/' + ${task.id}}">Edit</a> |
+        <a th:href="@{'/tasks/delete/' + ${task.id}}">Delete</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="day">
+  <h2>Later</h2>
+  </div>
+  <table>
+    <tbody>
+    <tr th:each="task : ${laterTasks}" th:class="${task.priority}">
+      <td th:text="${task.priority}">Priority</td>
+      <td th:text="${task.title}">Task Title</td>
+      <td th:text="${task.completed ? 'Completed' : 'Pending'}">Status</td>
+      <td th:text="${task.dueDate != null} ? ${#temporals.format(task.dueDate, 'yyyy-MM-dd')} : 'N/A'">Due Date</td>
+      <td th:text="${task.category != null} ? ${task.category.name} : 'Uncategorized'">Category</td>
+      <td>
+        <a th:href="@{'/tasks/edit/' + ${task.id}}">Edit</a> |
+        <a th:href="@{'/tasks/delete/' + ${task.id}}">Delete</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
 </div><script th:src="@{/js/theme-toggle.js}"></script>
 
 </body>

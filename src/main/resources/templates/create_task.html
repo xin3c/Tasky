@@ -25,6 +25,12 @@
               th:text="${category.name}">
       </option>
     </select>
+    <div>
+      <label for="priority">Priority</label>
+      <select id="priority" th:field="*{priority}">
+        <option th:each="priority : ${priorities}" th:value="${priority}" th:text="${priority}">Priority</option>
+      </select>
+    </div>
     <button type="submit">Create Task</button>
   </form>
 </div><script th:src="@{/js/theme-toggle.js}"></script>
