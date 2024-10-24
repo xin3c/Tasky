@@ -31,7 +31,7 @@ public class Task {
 
 
     @Column(nullable = false)
-    private Boolean completed = false;
+    private String status = "Not completed";
 
 
     @Column(nullable = false)
@@ -60,12 +60,10 @@ public class Task {
     private Category category;
 
 
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
-    private Set<Notification> notifications = new HashSet<>();
+    @OneToOne(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Notification notification;
 
-    /**
-     * Initializes creationDate before persisting.
-     */
+    // Initialize creationDate before persisting.
     @PrePersist
     protected void onCreate() {
         this.creationDate = LocalDateTime.now();

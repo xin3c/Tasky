@@ -1,5 +1,6 @@
 package com.tasky.services;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tasky.models.Notification;
 import com.tasky.models.UserSubscription;
@@ -39,7 +40,7 @@ public class NotificationService {
 
     private PushService pushService;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);;
 
     @Value("${vapid.public.key}")
     private String publicKeyStr;
@@ -53,7 +54,6 @@ public class NotificationService {
 
     @PostConstruct
     public void init() throws GeneralSecurityException, IOException {
-        // Регистрация провайдера Bouncy Castle
         Security.addProvider(new BouncyCastleProvider());
 
         ECPrivateKey privateKey = (ECPrivateKey) Utils.loadPrivateKey(privateKeyStr);
@@ -71,7 +71,6 @@ public class NotificationService {
 
         if (subscriptionEntity != null) {
             try {
-                // Разбираем JSON-строку подписки в объект nl.martijndwars.webpush.Subscription
                 nl.martijndwars.webpush.Subscription webPushSubscription =
                         objectMapper.readValue(subscriptionEntity.getSubscriptionJson(), nl.martijndwars.webpush.Subscription.class);
 
@@ -101,14 +100,9 @@ public class NotificationService {
         return notificationRepository.findByUser(user);
     }
 
-    public void saveNotification(Notification notification) {
-        notificationRepository.save(notification);
-    }
+    public void saveNotification(Notification notification) { notificationRepository.save(notification); }
 
-    public Notification findByTask(Task task) {
-        return notificationRepository.findByTask(task);
-    }
-
+    public Notification findByTask(Task task) { return notificationRepository.findByTask(task); }
     public void deleteNotification(Notification notification) {
         notificationRepository.delete(notification);
     }

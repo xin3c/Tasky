@@ -2,9 +2,8 @@ self.addEventListener('push', function(event) {
     const data = event.data.json();
     const options = {
         body: data.body,
-        icon: '/icons/icon-192x192.png', // Путь к иконке уведомления
         data: {
-            url: data.url // URL для перехода при клике на уведомление
+            url: data.url
         }
     };
     event.waitUntil(

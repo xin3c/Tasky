@@ -24,10 +24,12 @@ public class Notification {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // Связь с задачей
-    @ManyToOne
+
+    @OneToOne
     @JoinColumn(name = "task_id", nullable = false)
     private Task task;
+
+
 
 
     public Notification(String message, LocalDateTime sendTime, User user, Task task) {

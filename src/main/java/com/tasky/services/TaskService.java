@@ -4,8 +4,10 @@ import com.tasky.models.Category;
 import com.tasky.models.Task;
 import com.tasky.models.User;
 import com.tasky.repositories.TaskRepository;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,7 +16,8 @@ import java.util.List;
  */
 @Service
 public class TaskService {
-
+    @Autowired
+    private EntityManager entityManager;
     @Autowired
     private TaskRepository taskRepository;
 
@@ -65,6 +68,8 @@ public class TaskService {
      *
      * @param taskId the task ID
      */
+
+    @Transactional
     public void deleteTask(Long taskId) {
         taskRepository.deleteById(taskId);
     }

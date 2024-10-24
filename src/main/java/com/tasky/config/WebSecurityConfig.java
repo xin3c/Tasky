@@ -59,9 +59,9 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
 
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/static/css/**", "/static/js/**").permitAll()
+                        .requestMatchers( "/images/**","/static/**", "/css/**", "/js/**", "/images/**", "/static/css/**", "/static/js/**", "/service-worker.js").permitAll()
 
-                        .requestMatchers("/login", "/register").permitAll()
+                        .requestMatchers("/login", "/register", "/subscription").permitAll()
 
                         .anyRequest().authenticated()
                 )

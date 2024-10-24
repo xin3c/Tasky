@@ -116,7 +116,7 @@ public class TaskController {
     }
 
 
-    @PostMapping("/{id}/delete")
+    @GetMapping("/delete/{id}")
     public String deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
         return "redirect:/tasks";
@@ -134,7 +134,7 @@ public class TaskController {
         model.addAttribute("task", task);
         model.addAttribute("categories", categories);
         model.addAttribute("dueDate", dueDate);
-
+        model.addAttribute("priorities", new String[]{"Low", "Medium", "High"});
         return "edit_task";
     }
 
