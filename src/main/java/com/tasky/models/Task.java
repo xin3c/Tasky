@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -44,6 +46,10 @@ public class Task {
     private LocalDate dueDate;
 
 
+    @Column(nullable = true)
+    private LocalDateTime reminderTime;
+
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -52,6 +58,10 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    private Set<Notification> notifications = new HashSet<>();
 
     /**
      * Initializes creationDate before persisting.

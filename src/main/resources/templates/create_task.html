@@ -17,8 +17,13 @@
   <form th:action="@{/tasks}" th:object="${task}" method="post">
     <input type="text" th:field="*{title}" placeholder="Title" required autofocus/>
     <textarea th:field="*{description}" placeholder="Description"></textarea>
-    <input type="date" th:field="*{dueDate}" placeholder="Due Date"/>
-    <select th:field="*{category.id}">
+    <div>
+      <span id="charCount">0</span>/1000 characters
+    </div>
+    <input type="date" th:field="*{dueDate}" placeholder="Due Date" required/>
+    <label for="reminderTime">Reminder Time:</label>
+    <input type="datetime-local" id="reminderTime" name="reminderTime" th:field="*{reminderTime}" />
+    <select th:field="*{category.id}"required>
       <option value="" th:text="'Select Category'"></option>
       <option th:each="category : ${categories}"
               th:value="${category.id}"
@@ -27,7 +32,7 @@
     </select>
     <div>
       <label for="priority">Priority</label>
-      <select id="priority" th:field="*{priority}">
+      <select id="priority" th:field="*{priority}" required>
         <option th:each="priority : ${priorities}" th:value="${priority}" th:text="${priority}">Priority</option>
       </select>
     </div>

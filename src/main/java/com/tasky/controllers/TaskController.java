@@ -1,9 +1,11 @@
 package com.tasky.controllers;
 
 import com.tasky.models.Category;
+import com.tasky.models.Notification;
 import com.tasky.models.Task;
 import com.tasky.models.User;
 import com.tasky.services.CategoryService;
+import com.tasky.services.NotificationService;
 import com.tasky.services.TaskService;
 import com.tasky.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,23 +35,20 @@ public class TaskController {
     @Autowired
     private UserService userService;
 
-    /**
-     * Lists all tasks for the authenticated user.
-     */
+    @Autowired
+    private NotificationService notificationService;
+
+
     @GetMapping
     public String listTasks(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        // Получаем пользователя по имени пользователя
         User user = userService.findUserByUsername(userDetails.getUsername());
 
-        // Получаем все задачи для этого пользователя
         List<Task> tasks = taskService.getTasksByUser(user);
-
-        // Определяем сегодняшнюю дату, завтрашнюю дату и конец недели
         LocalDate today = LocalDate.now();
         LocalDate tomorrow = today.plusDays(1);
         LocalDate weekEnd = today.plusDays(7);
 
-        // Фильтрация задач по категориям (сегодня, завтра, на неделе, потом)
+
         List<Task> todayTasks = tasks.stream()
                 .filter(task -> task.getDueDate() != null && task.getDueDate().isEqual(today))
                 .collect(Collectors.toList());
@@ -66,7 +65,6 @@ public class TaskController {
                 .filter(task -> task.getDueDate() != null && task.getDueDate().isAfter(weekEnd))
                 .collect(Collectors.toList());
 
-        // Добавляем категории задач в модель
         model.addAttribute("todayTasks", todayTasks);
         model.addAttribute("tomorrowTasks", tomorrowTasks);
         model.addAttribute("thisWeekTasks", thisWeekTasks);
@@ -77,9 +75,7 @@ public class TaskController {
     }
 
 
-    /**
-     * Shows the form to create a new task.
-     */
+
     @GetMapping("/new")
     public String showCreateForm(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.findUserByUsername(userDetails.getUsername());
@@ -96,7 +92,17 @@ public class TaskController {
         User user = userService.findUserByUsername(userDetails.getUsername());
         task.setUser(user);
         taskService.saveTask(task);
+        if (task.getReminderTime() != null) {
+            Notification notification = new Notification();
+            notification.setMessage("Task remind: " + task.getTitle());
+            notification.setSendTime(task.getReminderTime());
+            notification.setUser(user);
+            notification.setTask(task);
+            notificationService.saveNotification(notification);
+        }
         return "redirect:/tasks";
+
+
     }
 
     @PostMapping("/{id}/complete")
@@ -144,6 +150,21 @@ public class TaskController {
         }
 
         taskService.saveTask(task);
+
+        // Обновляем или создаем уведомление при обновлении задачи
+        if (task.getReminderTime() != null) {
+            Notification notification = notificationService.findByTask(task);
+            if (notification == null) {
+                notification = new Notification();
+            }
+            notification.setMessage("Напоминание о задаче: " + task.getTitle());
+            notification.setSendTime(task.getReminderTime());
+            notification.setUser(user);
+            notification.setTask(task);
+            notificationService.saveNotification(notification);
+        }
+
         return "redirect:/tasks";
     }
+
 }
