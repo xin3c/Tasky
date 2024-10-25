@@ -9,78 +9,98 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
+
 /**
- * Service for task-related operations.
+ * The type Task service.
  */
 @Service
 public class TaskService {
-    @Autowired
-    private EntityManager entityManager;
+
     @Autowired
     private TaskRepository taskRepository;
 
+
+    public static final List<String> VALID_STATUSES = Arrays.asList("Not started", "In progress", "Completed");
+
+
     /**
-     * Creates or updates a task.
+     * Save task.
+     *
+     * @param task the task
+     */
+    public void saveTask(final Task task) {
+        taskRepository.save(task);
+    }
+
+
+    /**
+     * Gets tasks by user.
+     *
+     * @param user the user
+     * @return the tasks by user
+     */
+    public List<Task> getTasksByUser(final User user) {
+        return taskRepository.findByUser(user);
+    }
+
+
+    /**
+     * Gets tasks by user and category.
+     *
+     * @param user     the user
+     * @param category the category
+     * @return the tasks by user and category
+     */
+    public List<Task> getTasksByUserAndCategory(final User user, final Category category) {
+        return taskRepository.findByUserAndCategory(user, category);
+    }
+
+
+
+
+
+    /**
+     * Delete task.
+     *
+     * @param taskId the task id
+     */
+    @Transactional
+    public void deleteTask(final Long taskId) {
+        taskRepository.deleteById(taskId);
+    }
+
+
+    /**
+     * Find task by id task.
+     *
+     * @param taskId the task id
+     * @return the task
+     */
+    public Task findTaskById(final Long taskId) {
+        return taskRepository.findById(taskId).orElse(null);
+    }
+
+    /**
+     * Validates the status of the task.
+     *
+     * @param status the status to validate
+     */
+    private void validateTaskStatus(String status) {
+        if (!VALID_STATUSES.contains(status)) {
+            throw new IllegalArgumentException("Invalid task status: " + status);
+        }
+    }
+    /**
+     * Validates and saves a task.
      *
      * @param task the task to save
      * @return the saved task
      */
-    public Task saveTask(Task task) {
+    public Task createOrUpdateTask(Task task) {
+        validateTaskStatus(task.getStatus());
         return taskRepository.save(task);
-    }
-
-    /**
-     * Retrieves all tasks for a user.
-     *
-     * @param user the user
-     * @return list of tasks
-     */
-    public List<Task> getTasksByUser(User user) {
-        return taskRepository.findByUser(user);
-    }
-
-    /**
-     * Retrieves tasks by user and category.
-     *
-     * @param user     the user
-     * @param category the category
-     * @return list of tasks
-     */
-    public List<Task> getTasksByUserAndCategory(User user, Category category) {
-        return taskRepository.findByUserAndCategory(user, category);
-    }
-
-    /**
-     * Retrieves tasks by user and completion status.
-     *
-     * @param user      the user
-     * @param completed the completion status
-     * @return list of tasks
-     */
-    public List<Task> getTasksByUserAndStatus(User user, Boolean completed) {
-        return taskRepository.findByUserAndCompleted(user, completed);
-    }
-
-    /**
-     * Deletes a task.
-     *
-     * @param taskId the task ID
-     */
-
-    @Transactional
-    public void deleteTask(Long taskId) {
-        taskRepository.deleteById(taskId);
-    }
-
-    /**
-     * Finds a task by ID.
-     *
-     * @param taskId the task ID
-     * @return the task
-     */
-    public Task findTaskById(Long taskId) {
-        return taskRepository.findById(taskId).orElse(null);
     }
 }

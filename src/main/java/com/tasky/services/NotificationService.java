@@ -3,7 +3,7 @@ package com.tasky.services;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tasky.models.Notification;
-import com.tasky.models.UserSubscription;
+import com.tasky.models.UserSub;
 import com.tasky.models.Task;
 import com.tasky.models.User;
 import com.tasky.repositories.NotificationRepository;
@@ -16,9 +16,9 @@ import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.Security;
 import java.security.interfaces.ECPrivateKey;
@@ -26,21 +26,23 @@ import java.security.interfaces.ECPublicKey;
 import java.time.LocalDateTime;
 import java.util.List;
 
+
 /**
- * Service class for handling notifications.
+ * The type Notification service.
  */
 @Service
 public class NotificationService {
+    private static final Logger loggerMan = LoggerFactory.getLogger(NotificationService.class);
 
     @Autowired
-    private NotificationRepository notificationRepository;
+    private NotificationRepository notifRepo;
 
     @Autowired
-    private UserSubscriptionService userSubscriptionService;
+    private UserSubscriptionService userSubService;
 
     private PushService pushService;
 
-    private ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);;
+    private final ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     @Value("${vapid.public.key}")
     private String publicKeyStr;
@@ -52,12 +54,17 @@ public class NotificationService {
     private String subject;
 
 
+    /**
+     * Init.
+     *
+     * @throws GeneralSecurityException the general security exception
+     */
     @PostConstruct
-    public void init() throws GeneralSecurityException, IOException {
+    public void init() throws GeneralSecurityException {
         Security.addProvider(new BouncyCastleProvider());
 
-        ECPrivateKey privateKey = (ECPrivateKey) Utils.loadPrivateKey(privateKeyStr);
-        ECPublicKey publicKey = (ECPublicKey) Utils.loadPublicKey(publicKeyStr);
+        final ECPrivateKey privateKey = (ECPrivateKey) Utils.loadPrivateKey(privateKeyStr);
+        final ECPublicKey publicKey = (ECPublicKey) Utils.loadPublicKey(publicKeyStr);
 
         pushService = new PushService()
                 .setPrivateKey(privateKey)
@@ -65,45 +72,82 @@ public class NotificationService {
                 .setSubject(subject);
     }
 
-    public void sendNotification(Notification notification) {
-        User user = notification.getUser();
-        UserSubscription subscriptionEntity = userSubscriptionService.getSubscriptionByUser(user);
+    /**
+     * Send notification.
+     *
+     * @param notification the notification
+     */
+    public void sendNotification(final Notification notification) {
+        final User user = notification.getUser();
+        final UserSub subEntity = userSubService.getSubscriptionByUser(user);
 
-        if (subscriptionEntity != null) {
+        if (subEntity != null) {
             try {
-                nl.martijndwars.webpush.Subscription webPushSubscription =
-                        objectMapper.readValue(subscriptionEntity.getSubscriptionJson(), nl.martijndwars.webpush.Subscription.class);
+                final nl.martijndwars.webpush.Subscription webPushSubscription =
+                        objectMapper.readValue(subEntity.getSubscriptionJson(), nl.martijndwars.webpush.Subscription.class);
 
-                String payload = "{\"title\":\"Напоминание\",\"body\":\"" + notification.getMessage() + "\",\"url\":\"/tasks\"}";
+                final String payload = "{\"title\":\"Reminder: \",\"body\":\"" + notification.getMessage() + "\",\"url\":\"/tasks\"}";
 
-                nl.martijndwars.webpush.Notification webPushNotification = new nl.martijndwars.webpush.Notification(
+                final nl.martijndwars.webpush.Notification webPushNotification = new nl.martijndwars.webpush.Notification(
                         webPushSubscription,
                         payload
                 );
 
-                HttpResponse response = pushService.send(webPushNotification);
+                final HttpResponse response = pushService.send(webPushNotification);
                 if (response.getStatusLine().getStatusCode() == 201) {
                     notification.setSent(true);
-                    notificationRepository.save(notification);
+                    notifRepo.save(notification);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                if (loggerMan.isErrorEnabled()) {
+                    loggerMan.error("Error sending notification to user: {} - {}", user.getUsername(), e.getMessage(), e);
+                }
+
             }
         }
     }
 
 
-    public List<Notification> getPendingNotifications() {
-        return notificationRepository.findByIsSentFalseAndSendTimeBefore(LocalDateTime.now());
-    }
-    public List<Notification> getAllNotifications(User user) {
-        return notificationRepository.findByUser(user);
+    /**
+     * Gets pending notifications.
+     *
+     * @return the pending notifications
+     */
+    final public List<Notification> getPendingNotifications() {
+        return notifRepo.findByIsSentFalseAndSendTimeBefore(LocalDateTime.now());
     }
 
-    public void saveNotification(Notification notification) { notificationRepository.save(notification); }
+    /**
+     * Gets all notifications.
+     *
+     * @param user the user
+     * @return the all notifications
+     */
+    final public List<Notification> getAllNotifications(final User user) {
+        return notifRepo.findByUser(user);
+    }
 
-    public Notification findByTask(Task task) { return notificationRepository.findByTask(task); }
-    public void deleteNotification(Notification notification) {
-        notificationRepository.delete(notification);
+    /**
+     * Save notification.
+     *
+     * @param notification the notification
+     */
+    public void saveNotification(final Notification notification) { notifRepo.save(notification); }
+
+    /**
+     * Find by task notification.
+     *
+     * @param task the task
+     * @return the notification
+     */
+    public Notification findByTask(final Task task) { return notifRepo.findByTask(task); }
+
+    /**
+     * Delete notification.
+     *
+     * @param notification the notification
+     */
+    public void deleteNotification(final Notification notification) {
+        notifRepo.delete(notification);
     }
 }

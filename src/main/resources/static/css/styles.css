@@ -101,15 +101,27 @@ body {
     margin-top: 20px;
     font-size: 14px;
 }
+
+
 .theme-toggle {
-    margin-left: auto;
+    position: absolute;
+        top: 5px;
+        left: 10px;
     cursor: pointer;
-    color: var(--text-color);
-    background: none;
+    background-color: var(--button-background-color);
+    color: var(--button-text-color);
+    padding: 10px 20px;
     border: none;
+    border-radius: 4px;
     font-size: 16px;
     font-weight: 500;
+    transition: background-color 0.3s ease;
 }
+
+.theme-toggle:hover {
+    background-color: var(--dark-purple);
+}
+
 
 
 
@@ -194,6 +206,7 @@ form input[type="text"],
 form input[type="password"],
 form input[type="email"],
 form input[type="date"],
+form input[type="datetime-local"],
 form textarea,
 form select {
     background-color: var(--input-background-color);
@@ -210,6 +223,7 @@ form input[type="text"]:focus,
 form input[type="password"]:focus,
 form input[type="email"]:focus,
 form input[type="date"]:focus,
+form input[type="datetime-local"]
 form textarea:focus,
 form select:focus {
     border-color: var(--link-color);
@@ -278,15 +292,26 @@ form a:hover {
 
 
 /* Task cards */
-
-
+.select  {
+    background-color: var(--input-background-color);
+    color: var(--input-text-color);
+    width: 75%;
+    padding: 3px 3px;
+    margin-bottom: 15px;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    font-size: 16px;
+}
+.select:focus {
+    border-color: var(--link-color);
+    outline: none;
+}
 .task-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     grid-gap: 20px;
     margin-top: 20px;
 }
-
 
 .task-card {
     border: 1px solid #444;
@@ -313,7 +338,6 @@ form a:hover {
     font-weight: bold;
     padding: 5px 10px;
     border-radius: 5px;
-    color: #fff;
     font-size: 14px;
     margin-right: 15px;
 }

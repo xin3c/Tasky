@@ -58,7 +58,7 @@ _Easily create new tasks with due dates and categories._
        git clone https://github.com/yourusername/tasky.git cd tasky
     ```
     
-3. **Set up the database**
+2. **Set up the database**
     
     - Create a MySQL database named `tasky_db`.
         
@@ -70,17 +70,17 @@ _Easily create new tasks with due dates and categories._
         spring.datasource.password=your_mysql_password
         ```
         
-4. **Build the project**
+3**Build the project**
     ```bash
        mvn clean install
     ```
-5. **Run the application**
+4**Run the application**
     
     ```bash
        mvn spring-boot:run
     ```
     
-6. **Access the application**
+5. **Access the application**
     
     - Open your browser and navigate to `http://localhost:8080`.
 
@@ -93,18 +93,15 @@ _Easily create new tasks with due dates and categories._
 2. **Log in**
     
     - Use your credentials to log in.
-3. **Create tasks**
-    
-    - Navigate to the "Tasks" page.
-    - Click on "Create New Task" and fill in the details.
-4. **Manage categories**
-    
+3. **Manage categories**
+
     - Navigate to the "Categories" page.
     - Create new categories and assign tasks to them.
-5. **Filter and sort tasks**
-    
-    - Use the filter options to view tasks by category or status.
-    - Sort tasks by creation date or due date.
+4. **Create tasks**
+
+    - Navigate to the "Tasks" page.
+    - Click on "Create New Task" and fill in the details.
+
 
 ## Project Structure
 
@@ -131,19 +128,10 @@ _Easily create new tasks with due dates and categories._
 - **Lombok**
 - **Maven**
 
-## Contributing
-
-Contributions are welcome!
 
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-
-
-
-
-- Thanks to the [Spring](https://spring.io/) community for their excellent resources and support.
 
 
 ## Contact
@@ -151,4 +139,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 Feel free to reach out for any questions or suggestions:
 
 - **Email**: vkupin@neoflex.ru
-- **GitHub**: [yourusername](https://github.com/xin3c)
+- **GitHub**: [xin3c](https://github.com/xin3c)

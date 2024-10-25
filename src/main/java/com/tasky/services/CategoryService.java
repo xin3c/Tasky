@@ -8,51 +8,55 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 /**
- * Service for category-related operations.
+ * The type Category service.
  */
 @Service
 public class CategoryService {
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryRepository categoryRepo;
+
 
     /**
-     * Creates or updates a category.
+     * Save category.
      *
-     * @param category the category to save
-     * @return the saved category
+     * @param category the category
      */
-    public Category saveCategory(Category category) {
-        return categoryRepository.save(category);
+    public void saveCategory(final Category category) {
+        categoryRepo.save(category);
     }
 
+
     /**
-     * Retrieves all categories for a user.
+     * Gets categories by user.
      *
      * @param user the user
-     * @return list of categories
+     * @return the categories by user
      */
-    public List<Category> getCategoriesByUser(User user) {
-        return categoryRepository.findByUser(user);
+    public List<Category> getCategoriesByUser(final User user) {
+        return categoryRepo.findByUser(user);
     }
 
-    /**
-     * Deletes a category.
-     *
-     * @param categoryId the category ID
-     */
-    public void deleteCategory(Long categoryId) {
-        categoryRepository.deleteById(categoryId);
-    }
 
     /**
-     * Finds a category by ID.
+     * Delete category.
      *
-     * @param categoryId the category ID
+     * @param categoryId the category id
+     */
+    public void deleteCategory(final Long categoryId) {
+        categoryRepo.deleteById(categoryId);
+    }
+
+
+    /**
+     * Find category by id category.
+     *
+     * @param categoryId the category id
      * @return the category
      */
-    public Category findCategoryById(Long categoryId) {
-        return categoryRepository.findById(categoryId).orElse(null);
+    public Category findCategoryById(final Long categoryId) {
+        return categoryRepo.findById(categoryId).orElse(null);
     }
 }

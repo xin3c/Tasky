@@ -5,6 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+
+/**
+ * The type Notification.
+ */
 @Data
 @NoArgsConstructor
 @Entity
@@ -30,9 +34,15 @@ public class Notification {
     private Task task;
 
 
-
-
-    public Notification(String message, LocalDateTime sendTime, User user, Task task) {
+    /**
+     * Instantiates a new Notification.
+     *
+     * @param message  the message
+     * @param sendTime the send time
+     * @param user     the user
+     * @param task     the task
+     */
+    public Notification(final String message, final LocalDateTime sendTime, final User user, final Task task) {
         this.message = message;
         this.sendTime = sendTime;
         this.user = user;

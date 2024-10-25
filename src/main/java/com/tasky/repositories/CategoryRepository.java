@@ -6,16 +6,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
+
 /**
- * Repository interface for Category entity.
+ * The interface Category repository.
  */
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
+
     /**
-     * Finds categories by user.
+     * Find by user list.
      *
      * @param user the user
-     * @return list of categories
+     * @return the list
      */
     List<Category> findByUser(User user);
 }

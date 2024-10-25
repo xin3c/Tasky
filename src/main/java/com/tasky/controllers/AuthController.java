@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+
 /**
- * Controller for authentication and registration.
+ * The type Auth controller.
  */
+@SuppressWarnings("ALL")
 @Controller
 public class AuthController {
 
@@ -23,52 +25,59 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
     /**
-     * Shows the login page.
+     * Show login form string.
      *
-     * @return login view
+     * @return the string
      */
     @GetMapping("/login")
     public String showLoginForm() {
         return "login";
     }
 
+
     /**
-     * Shows the registration page.
+     * Show registration form string.
      *
-     * @return registration view
+     * @param model the model
+     * @return the string
      */
     @GetMapping("/register")
-    public String showRegistrationForm(Model model) {
+    public String showRegistrationForm(final Model model) {
         model.addAttribute("user", new User());
         return "register";
     }
 
+
     /**
-     * Processes logout.
+     * Logout user string.
      *
-     * @return lgout call
+     * @param ignoredModel the ignored model
+     * @return the string
      */
     @GetMapping("/logout")
-    public String logoutUser(Model model) {
+    public String logoutUser(Model ignoredModel) {
         return "logout";
     }
 
+
     /**
-     * Processes the registration form.
+     * Register user string.
      *
-     * @param user the user
-     * @return redirect to login page
+     * @param user          the user
+     * @param bindingResult the binding result
+     * @return the string
      */
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute("user") User user, BindingResult bindingResult) {
+    public String registerUser(@ModelAttribute("user") final User user, final BindingResult bindingResult) {
         if (userService.usernameExists(user.getUsername())) {
             bindingResult.rejectValue("username", "error.user", "Username already taken");
         }
         if (userService.emailExists(user.getEmail())) {
             bindingResult.rejectValue("email", "error.user", "Email already registered");
         }
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) { //NOPMD - suppressed OnlyOneReturn - TODO explain reason for suppression
             return "register";
         }
         userService.registerUser(user);

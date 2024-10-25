@@ -4,19 +4,28 @@ import com.tasky.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+
 /**
- * Repository interface for User entities.
+ * The interface User repository.
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
+
     /**
-     * Find user by username.
+     * Find by username user.
+     *
+     * @param username the username
+     * @return the user
      */
     User findByUsername(String username);
 
+
     /**
-     * Find user by email.
+     * Find by email user.
+     *
+     * @param email the email
+     * @return the user
      */
     User findByEmail(String email);
 }

@@ -14,128 +14,44 @@
   <a th:href="@{/categories}">Categories</a>
   <a th:href="@{/logout}">Logout</a>
 </div>
-
+<!-- Overdue Tasks -->
 <div class="container">
   <h2>Your Tasks</h2>
   <div class="actions">
     <a th:href="@{/tasks/new}" class="button">Create New Task</a>
   </div>
-
-  <!-- Today Tasks -->
-  <div class="day">
-    <h2>Today</h2>
-    <div class="task-cards">
-      <div th:each="task : ${todayTasks}" class="task-card" th:classappend="${task.priority}">
-        <div class="task-header">
-          <span class="priority-label" th:text="${task.priority}"></span>
-          <h3 th:text="${task.title}">Task Title</h3>
-        </div>
-        <div class="task-body">
-          <p>Status: <span th:text="${task.completed ? 'Completed' : 'Not Completed'}"></span></p>
-          <p>Due: <span th:text="${#temporals.format(task.dueDate, 'yyyy-MM-dd')}">Due Date</span></p>
-          <p>Reminder:
-            <span th:if="${task.reminderTime != null}" th:text="${#temporals.format(task.reminderTime, 'yyyy-MM-dd HH:mm')}">Reminder Time</span>
-            <span th:if="${task.reminderTime == null}">❌</span>
-          </p>
-          <p>Category: <span th:text="${task.category != null} ? ${task.category.name} : 'Uncategorized'">Category</span></p>
-          <div>
-            <a href="#" onclick="toggleDescription(this); return false;">Show Description</a>
-            <div class="task-desc" style="display: none;" th:text="${task.description}"></div>
+  <div th:each="group : ${taskGroups}">
+    <div class="day">
+      <h2 th:text="${group.title}">Category Title</h2>
+      <div class="task-cards">
+        <!-- Итерация по задачам внутри группы -->
+        <div th:each="task : ${group.tasks}" class="task-card" th:classappend="${task.priority}">
+          <div class="task-header">
+            <span class="priority-label" th:text="${task.priority}"></span>
+            <h3 th:text="${task.title}">Task Title</h3>
           </div>
-        </div>
-        <div class="task-actions">
-          <a th:href="@{'/tasks/edit/' + ${task.id}}" class="edit-btn">Edit</a>
-          <a th:href="@{'/tasks/delete/' + ${task.id}}" class="delete-btn">Delete</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Tomorrow Tasks -->
-  <div class="day">
-    <h2>Tomorrow</h2>
-    <div class="task-cards">
-      <div th:each="task : ${tomorrowTasks}" class="task-card" th:classappend="${task.priority}">
-        <div class="task-header">
-          <span class="priority-label" th:text="${task.priority}"></span>
-          <h3 th:text="${task.title}">Task Title</h3>
-        </div>
-        <div class="task-body">
-          <p>Status: <span th:text="${task.completed ? 'Completed' : 'Pending'}"></span></p>
-          <p>Due: <span th:text="${#temporals.format(task.dueDate, 'yyyy-MM-dd')}">Due Date</span></p>
-          <p>Reminder:
-            <span th:if="${task.reminderTime != null}" th:text="${#temporals.format(task.reminderTime, 'yyyy-MM-dd HH:mm')}">Reminder Time</span>
-            <span th:if="${task.reminderTime == null}">❌</span>
-          </p>
-          <p>Category: <span th:text="${task.category != null} ? ${task.category.name} : 'Uncategorized'">Category</span></p>
-          <div>
-            <a href="#" onclick="toggleDescription(this); return false;">Show Description</a>
-            <div class="task-desc" style="display: none;" th:text="${task.description}"></div>
+          <div class="task-body">
+            <p>Status:
+              <select class="select" th:attr="data-task-id=${task.id}">
+                <option th:selected="${task.status == 'Not started'}" th:value="'Not started'">Not started</option>
+                <option th:selected="${task.status == 'In progress'}" th:value="'In progress'">In progress</option>
+                <option th:selected="${task.status == 'Completed'}" th:value="'Completed'">Completed</option>
+              </select>
+            <p>Due: <span th:text="${#temporals.format(task.dueDate, 'yyyy-MM-dd')}">Due Date</span></p>
+            <p>Reminder:
+              <span th:if="${task.reminderTime != null}" th:text="${#temporals.format(task.reminderTime, 'yyyy-MM-dd HH:mm')}">Reminder Time</span>
+              <span th:if="${task.reminderTime == null}">❌</span>
+            </p>
+            <p>Category: <span th:text="${task.category != null} ? ${task.category.name} : 'Uncategorized'">Category</span></p>
+            <div>
+              <a href="#" onclick="toggleDescription(this); return false;">Show Description</a>
+              <div class="task-desc" style="display: none;" th:text="${task.description}"></div>
+            </div>
           </div>
-        </div>
-        <div class="task-actions">
-          <a th:href="@{'/tasks/edit/' + ${task.id}}" class="edit-btn">Edit</a>
-          <a th:href="@{'/tasks/delete/' + ${task.id}}" class="delete-btn">Delete</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- This Week Tasks -->
-  <div class="day">
-    <h2>This Week</h2>
-    <div class="task-cards">
-      <div th:each="task : ${thisWeekTasks}" class="task-card" th:classappend="${task.priority}">
-        <div class="task-header">
-          <span class="priority-label" th:text="${task.priority}"></span>
-          <h3 th:text="${task.title}">Task Title</h3>
-        </div>
-        <div class="task-body">
-          <p>Status: <span th:text="${task.completed ? 'Completed' : 'Pending'}"></span></p>
-          <p>Due: <span th:text="${#temporals.format(task.dueDate, 'yyyy-MM-dd')}">Due Date</span></p>
-          <p>Reminder:
-            <span th:if="${task.reminderTime != null}" th:text="${#temporals.format(task.reminderTime, 'yyyy-MM-dd HH:mm')}">Reminder Time</span>
-            <span th:if="${task.reminderTime == null}">❌</span>
-          </p>
-          <p>Category: <span th:text="${task.category != null} ? ${task.category.name} : 'Uncategorized'">Category</span></p>
-          <div>
-            <a href="#" onclick="toggleDescription(this); return false;">Show Description</a>
-            <div class="task-desc" style="display: none;" th:text="${task.description}"></div>
+          <div class="task-actions">
+            <a th:href="@{'/tasks/edit/' + ${task.id}}" class="edit-btn">Edit</a>
+            <a th:href="@{'/tasks/delete/' + ${task.id}}" class="delete-btn">Delete</a>
           </div>
-        </div>
-        <div class="task-actions">
-          <a th:href="@{'/tasks/edit/' + ${task.id}}" class="edit-btn">Edit</a>
-          <a th:href="@{'/tasks/delete/' + ${task.id}}" class="delete-btn">Delete</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Later Tasks -->
-  <div class="day">
-    <h2>Later</h2>
-    <div class="task-cards">
-      <div th:each="task : ${laterTasks}" class="task-card" th:classappend="${task.priority}">
-        <div class="task-header">
-          <span class="priority-label" th:text="${task.priority}"></span>
-          <h3 th:text="${task.title}">Task Title</h3>
-        </div>
-        <div class="task-body">
-          <p>Status: <span th:text="${task.completed ? 'Completed' : 'Pending'}"></span></p>
-          <p>Due: <span th:text="${#temporals.format(task.dueDate, 'yyyy-MM-dd')}">Due Date</span></p>
-          <p>Reminder:
-            <span th:if="${task.reminderTime != null}" th:text="${#temporals.format(task.reminderTime, 'yyyy-MM-dd HH:mm')}">Reminder Time</span>
-            <span th:if="${task.reminderTime == null}">❌</span>
-          </p>
-          <p>Category: <span th:text="${task.category != null} ? ${task.category.name} : 'Uncategorized'">Category</span></p>
-          <div>
-            <a href="#" onclick="toggleDescription(this); return false;">Show Description</a>
-            <div class="task-desc" style="display: none;" th:text="${task.description}"></div>
-          </div>
-        </div>
-        <div class="task-actions">
-          <a th:href="@{'/tasks/edit/' + ${task.id}}" class="edit-btn">Edit</a>
-          <a th:href="@{'/tasks/delete/' + ${task.id}}" class="delete-btn">Delete</a>
         </div>
       </div>
     </div>
@@ -151,5 +67,33 @@
       link.textContent = desc.style.display === 'none' ? 'Show Description' : 'Hide Description';
   }
 </script>
+<!-- ajax status update -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Обработка изменения статуса в выпадающем списке
+    document.querySelectorAll('.status-select').forEach(function(selectElement) {
+      selectElement.addEventListener('change', function() {
+        const taskId = this.getAttribute('data-task-id');
+        const newStatus = this.value;
+
+        // Отправляем запрос на сервер для обновления статуса
+        fetch(`/tasks/update-status/${taskId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').getAttribute('content')
+          },
+          body: JSON.stringify({ status: newStatus })
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(`Status for task ${taskId} updated to ${newStatus}`);
+        })
+        .catch(error => console.error('Error:', error));
+      });
+    });
+  });
+</script>
+
 </body>
 </html>

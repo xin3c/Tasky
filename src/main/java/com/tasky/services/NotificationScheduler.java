@@ -7,13 +7,19 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * The type Notification scheduler.
+ */
 @Component
 public class NotificationScheduler {
 
     @Autowired
     private NotificationService notificationService;
 
-    @Scheduled(fixedRate = 60000)
+    /**
+     * Schedule notification.
+     */
+    @Scheduled(fixedRate = 60_000)
     public void scheduleNotification() {
         List<Notification> pendingNotifications = notificationService.getPendingNotifications();
         for (Notification notification : pendingNotifications) {

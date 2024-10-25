@@ -1,29 +1,44 @@
 package com.tasky.services;
 
 import com.tasky.models.User;
-import com.tasky.models.UserSubscription;
+import com.tasky.models.UserSub;
 import com.tasky.repositories.UserSubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * The type User subscription service.
+ */
 @Service
 public class UserSubscriptionService {
 
     @Autowired
-    private UserSubscriptionRepository userSubscriptionRepository;
+    private UserSubscriptionRepository usrSubRepo;
 
-    public void saveSubscription(String subscriptionJson, User user) {
-        UserSubscription existingSubscription = getSubscriptionByUser(user);
+    /**
+     * Save subscription.
+     *
+     * @param subscriptionJson the subscription json
+     * @param user             the user
+     */
+    public void saveSubscription(final String subscriptionJson, final User user) {
+        final UserSub existingSubscription = getSubscriptionByUser(user);
         if (existingSubscription != null) {
             existingSubscription.setSubscriptionJson(subscriptionJson);
-            userSubscriptionRepository.save(existingSubscription);
+            usrSubRepo.save(existingSubscription);
         } else {
-            UserSubscription subscription = new UserSubscription(subscriptionJson, user);
-            userSubscriptionRepository.save(subscription);
+            final UserSub subscription = new UserSub(subscriptionJson, user);
+            usrSubRepo.save(subscription);
         }
     }
 
-    public UserSubscription getSubscriptionByUser(User user) {
-        return userSubscriptionRepository.findByUser(user).stream().findFirst().orElse(null);
+    /**
+     * Gets subscription by user.
+     *
+     * @param user the user
+     * @return the subscription by user
+     */
+    public final UserSub getSubscriptionByUser(final User user) {
+        return usrSubRepo.findByUser(user).stream().findFirst().orElse(null);
     }
 }

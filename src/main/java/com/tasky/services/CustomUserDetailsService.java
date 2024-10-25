@@ -12,30 +12,38 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.Set;
 
+
 /**
- * Custom implementation of UserDetailsService.
+ * The type Custom user details service.
  */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+
     /**
-     * Constructor injection of UserRepository.
+     * Instantiates a new Custom user details service.
+     *
+     * @param userRepository the user repository
      */
-    public CustomUserDetailsService(UserRepository userRepository) {
+    public CustomUserDetailsService(final UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     /**
-     * Loads user by username.
+     * Loads user details by username.
+     *
+     * @param username the username
+     * @return UserDetails containing user information
+     * @throws UsernameNotFoundException if the user is not found
      */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if (user == null) throw new UsernameNotFoundException("User not found");
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
+        final User user = userRepository.findByUsername(username);
+        if (user == null) {throw new UsernameNotFoundException("User not found");}
 
-        Set<GrantedAuthority> authorities = new HashSet<>();
+        final Set<GrantedAuthority> authorities = new HashSet<>();
         user.getRoles().forEach(role ->
                 authorities.add(new SimpleGrantedAuthority("ROLE_" + role))
         );

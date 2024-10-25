@@ -6,10 +6,11 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 
+/**
+ * The type Task.
+ */
 @Entity
 @Table(name = "tasks")
 @Data
@@ -31,7 +32,7 @@ public class Task {
 
 
     @Column(nullable = false)
-    private String status = "Not completed";
+    private String status = "Not started";
 
 
     @Column(nullable = false)
@@ -63,7 +64,10 @@ public class Task {
     @OneToOne(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     private Notification notification;
 
-    // Initialize creationDate before persisting.
+    /**
+     * On create.
+     */
+// Initialize creationDate before persisting.
     @PrePersist
     protected void onCreate() {
         this.creationDate = LocalDateTime.now();

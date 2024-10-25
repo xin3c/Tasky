@@ -3,9 +3,12 @@ package com.tasky.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+/**
+ * The type User sub.
+ */
 @Data
 @Entity
-public class UserSubscription {
+public class UserSub {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,10 +21,19 @@ public class UserSubscription {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public UserSubscription() {
+    /**
+     * Instantiates a new User sub.
+     */
+    public UserSub() {
     }
 
-    public UserSubscription(String subscriptionJson, User user) {
+    /**
+     * Instantiates a new User sub.
+     *
+     * @param subscriptionJson the subscription json
+     * @param user             the user
+     */
+    public UserSub(final String subscriptionJson, final User user) {
         this.subscriptionJson = subscriptionJson;
         this.user = user;
     }

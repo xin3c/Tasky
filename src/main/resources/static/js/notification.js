@@ -57,7 +57,7 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                [csrfHeader]: csrfToken // Защита от CSRF
+                [csrfHeader]: csrfToken
             },
             body: JSON.stringify(subscription)
         });

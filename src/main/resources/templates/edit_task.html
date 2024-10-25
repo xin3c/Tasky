@@ -32,9 +32,12 @@
     <select id="priority" th:field="*{priority}">
       <option th:each="priority : ${priorities}" th:value="${priority}" th:text="${priority}">Priority</option>
     </select>
-    <label>
-      <input type="checkbox" th:field="*{completed}"/> Completed
-    </label>
+    <label>Task Status</label>
+    <select id="status" name="status">
+      <option value="Not started">Not started</option>
+      <option value="In progress">In progress</option>
+      <option value="Completed">Completed</option>
+    </select>
     <button type="submit">Update Task</button>
   </form>
 </div><script th:src="@{/js/theme-toggle.js}"></script>

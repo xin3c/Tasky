@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 
 /**
- * Service class for handling user-related operations.
+ * The type User service.
  */
 @Service
 public class UserService {
@@ -15,57 +15,60 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
+
     /**
-     * Constructor injection of UserRepository and BCryptPasswordEncoder.
+     * Instantiates a new User service.
      *
      * @param userRepository  the user repository
      * @param passwordEncoder the password encoder
      */
-
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(final UserRepository userRepository, final BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    /**
-     * Registers a new user with encrypted password.
-     *
-     * @param user the user to register
-     * @return the saved user
-     */
-    public User registerUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.getRoles().add("USER");
-        return userRepository.save(user);
-    }
 
     /**
-     * Finds a user by username.
+     * Register user.
+     *
+     * @param user the user
+     */
+    public void registerUser(final User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.getRoles().add("USER");
+        userRepository.save(user);
+    }
+
+
+    /**
+     * Find user by username user.
      *
      * @param username the username
-     * @return the user if found, else null
+     * @return the user
      */
-    public User findUserByUsername(String username) {
+    public User findUserByUsername(final String username) {
         return userRepository.findByUsername(username);
     }
 
+
     /**
-     * Checks if a username already exists.
+     * Username exists boolean.
      *
      * @param username the username
-     * @return true if username exists, else false
+     * @return the boolean
      */
-    public boolean usernameExists(String username) {
+    public boolean usernameExists(final String username) {
         return userRepository.findByUsername(username) != null;
     }
 
+
     /**
-     * Checks if an email already exists.
+     * Email exists boolean.
      *
      * @param email the email
-     * @return true if email exists, else false
+     * @return the boolean
      */
-    public boolean emailExists(String email) {
+    public boolean emailExists(final String email) {
         return userRepository.findByEmail(email) != null;
     }
 }
