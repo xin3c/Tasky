@@ -24,7 +24,6 @@
     <div class="day">
       <h2 th:text="${group.title}">Category Title</h2>
       <div class="task-cards">
-        <!-- Итерация по задачам внутри группы -->
         <div th:each="task : ${group.tasks}" class="task-card" th:classappend="${task.priority}">
           <div class="task-header">
             <span class="priority-label" th:text="${task.priority}"></span>

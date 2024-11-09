@@ -1,5 +1,7 @@
 (function() {
     let swRegistration = null;
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
 
     const applicationServerPublicKey = 'BNJSYcMGYKXCl6_HSQXy43lPJkHQiHhVwaX-uczlFxPSUdw3tpBJG1C2xc1N2TxO2AZRIuj1C7QQW_j-mK8GttI';
 
@@ -8,7 +10,6 @@
         const base64 = (base64String + padding)
             .replace(/\-/g, '+')
             .replace(/_/g, '/');
-
         const rawData = window.atob(base64);
         const outputArray = new Uint8Array(rawData.length);
         for (let i = 0; i < rawData.length; ++i) {
@@ -27,7 +28,7 @@
             sendSubscriptionToServer(subscription);
         })
         .catch(function(error) {
-            logErrorToServer(error);
+            console.error(error);
         });
     }
 
@@ -46,7 +47,7 @@
                 askPermission();
             })
             .catch(function(error) {
-                logErrorToServer(error);
+                console.error(error);
             });
     } else {
         console.warn('Push-notifications are not supported in this browser');
@@ -60,6 +61,12 @@
                 [csrfHeader]: csrfToken
             },
             body: JSON.stringify(subscription)
-        });
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to send subscription to server');
+            }
+        })
+        .catch(error => console.error('Error:', error));
     }
 })();
