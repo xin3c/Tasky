@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.tasky.services.NotificationService.loggerMan;
+
 
 /**
  * The type Notification controller.
@@ -65,6 +67,7 @@ public class NotificationController {
      */
     @PostMapping
     public String createNotification(@ModelAttribute final Notification notification, @AuthenticationPrincipal final UserDetails userDetails) {
+        loggerMan.info("CreateNotification with args: Notif: "+ notification + " UserDetails: " + userDetails);
         final User user = userService.findUserByUsername(userDetails.getUsername());
         notification.setUser(user);
         notification.setSendTime(LocalDateTime.now());

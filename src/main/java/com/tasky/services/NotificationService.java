@@ -32,7 +32,7 @@ import java.util.List;
  */
 @Service
 public class NotificationService {
-    private static final Logger loggerMan = LoggerFactory.getLogger(NotificationService.class);
+    public static final Logger loggerMan = LoggerFactory.getLogger(NotificationService.class);
 
     @Autowired
     private NotificationRepository notifRepo;
@@ -78,11 +78,16 @@ public class NotificationService {
      * @param notification the notification
      */
     public void sendNotification(final Notification notification) {
+        // loggerMan.info("Entering NotificationService.void sendNotification with args: final Notification notification");
         final User user = notification.getUser();
         final UserSub subEntity = userSubService.getSubscriptionByUser(user);
-
-        if (subEntity != null) {
+        if (subEntity == null){
+            // loggerMan.info("SubEntity = null. {}, {}, {}", user.getUsername(), notification.isSent(), notification.getMessage());
+        }
+        else {
             try {
+                loggerMan.info("Subscription JSON: {}", subEntity.getSubscriptionJson());
+
                 final nl.martijndwars.webpush.Subscription webPushSubscription =
                         objectMapper.readValue(subEntity.getSubscriptionJson(), nl.martijndwars.webpush.Subscription.class);
 
@@ -96,8 +101,12 @@ public class NotificationService {
                 final HttpResponse response = pushService.send(webPushNotification);
                 if (response.getStatusLine().getStatusCode() == 201) {
                     notification.setSent(true);
+                    loggerMan.info("Notification sent successfully to user: {}", user.getUsername());
+
                     notifRepo.save(notification);
                 }
+                loggerMan.info("HTTP Response Status: {}", response.getStatusLine().getStatusCode());
+
             } catch (Exception e) {
                 if (loggerMan.isErrorEnabled()) {
                     loggerMan.error("Error sending notification to user: {} - {}", user.getUsername(), e.getMessage(), e);
@@ -132,7 +141,10 @@ public class NotificationService {
      *
      * @param notification the notification
      */
-    public void saveNotification(final Notification notification) { notifRepo.save(notification); }
+    public void saveNotification(final Notification notification) {
+        loggerMan.info("SaveNotification. User:  {}, Msg: {}", notification.getUser(), notification.getMessage());
+        notifRepo.save(notification);
+    }
 
     /**
      * Find by task notification.
@@ -140,7 +152,10 @@ public class NotificationService {
      * @param task the task
      * @return the notification
      */
-    public Notification findByTask(final Task task) { return notifRepo.findByTask(task); }
+    public Notification findByTask(final Task task) {
+        // loggerMan.info("Entering NotificationService.Notification findByTask with args: final Task task");
+        return notifRepo.findByTask(task);
+    }
 
     /**
      * Delete notification.
@@ -148,6 +163,7 @@ public class NotificationService {
      * @param notification the notification
      */
     public void deleteNotification(final Notification notification) {
+        // loggerMan.info("Entering NotificationService.void deleteNotification with args: final Notification notification");
         notifRepo.delete(notification);
     }
 }
