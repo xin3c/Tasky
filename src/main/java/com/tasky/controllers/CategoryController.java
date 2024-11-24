@@ -5,13 +5,21 @@ import com.tasky.models.User;
 import com.tasky.services.CategoryService;
 import com.tasky.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.tasky.services.NotificationService.loggerMan;
 
 
 /**
@@ -27,7 +35,8 @@ public class CategoryController {
 
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private ResourceLoader resourceLoader;
     /**
      * List categories string.
      *
@@ -39,6 +48,8 @@ public class CategoryController {
     public String listCategories(final Model model, @AuthenticationPrincipal final UserDetails userDetails) {
         final User user = userService.findUserByUsername(userDetails.getUsername());
         final List<Category> categories = categoryService.getCategoriesByUser(user);
+        model.addAttribute("light_icons", loadIcons("classpath:/static/icons/light/*.svg"));
+        model.addAttribute("dark_icons", loadIcons("classpath:/static/icons/dark/*.svg"));
         model.addAttribute("categories", categories);
         return "categories";
     }
@@ -50,9 +61,27 @@ public class CategoryController {
      * @return the string
      */
     @GetMapping("/new")
-    public String showCreateForm(final Model model) {
+    public String showCreateCategoryForm(Model model) {
+
+        model.addAttribute("light_icons", loadIcons("classpath:/static/icons/light/*.svg"));
+        model.addAttribute("dark_icons", loadIcons("classpath:/static/icons/dark/*.svg"));
+
         model.addAttribute("category", new Category());
         return "create_category";
+    }
+
+    public static List<String> loadIcons(String pathPattern) {
+        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        Resource[] resources;
+        try {
+            resources = resolver.getResources(pathPattern);
+        } catch (IOException e) {
+            resources = new Resource[0];
+            loggerMan.error("Entering NotificationService.void sendNotification with args: final Notification notification");
+        }
+        return Stream.of(resources)
+                .map(Resource::getFilename)
+                .collect(Collectors.toList());
     }
 
     /**

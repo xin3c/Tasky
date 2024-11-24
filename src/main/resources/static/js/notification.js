@@ -3,7 +3,7 @@
     const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
     const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
 
-    const applicationServerPublicKey = 'BNJSYcMGYKXCl6_HSQXy43lPJkHQiHhVwaX-uczlFxPSUdw3tpBJG1C2xc1N2TxO2AZRIuj1C7QQW_j-mK8GttI';
+    const applicationServerPublicKey = document.querySelector('meta[name="application-server-public-key"]').getAttribute('content');
 
     function urlB64ToUint8Array(base64String) {
         const padding = '='.repeat((4 - base64String.length % 4) % 4);

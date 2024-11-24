@@ -19,7 +19,7 @@ public class NotificationScheduler {
     /**
      * Schedule notification.
      */
-    @Scheduled(fixedRate = 60_000)
+    @Scheduled(fixedRate = 10_000)
     public void scheduleNotification() {
         List<Notification> pendingNotifications = notificationService.getPendingNotifications();
         for (Notification notification : pendingNotifications) {

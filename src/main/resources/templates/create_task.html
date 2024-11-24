@@ -16,25 +16,29 @@
 <div class="container">
   <h2>Create New Task</h2>
   <form th:action="@{/tasks}" th:object="${task}" method="post">
+    <input type="hidden" th:field="*{id}"/>
+    <input type="hidden" name="timeZone" id="timeZone" />
+    <label>Title:</label>
     <input type="text" th:field="*{title}" placeholder="Title" required autofocus/>
+    <label>Description:</label>
     <textarea th:field="*{description}" placeholder="Description"></textarea>
-
-    <input type="date" th:field="*{dueDate}" placeholder="Due Date" required/>
-    <label>Reminder Time:</label>
-    <input type="datetime-local" th:field="*{reminderTime}" />
-    <select th:field="*{category.id}"required>
+    <label>Due Date:</label>
+    <input type="date" th:field="*{dueDate}" placeholder="Due Date"/>
+    <label>Category:</label>
+    <select th:field="*{category.id}">
       <option value="" th:text="'Select Category'"></option>
       <option th:each="category : ${categories}"
               th:value="${category.id}"
-              th:text="${category.name}">
+              th:text="${category.name}"
+              th:selected="${task.category != null} ? ${category.id == task.category.id} : false">
       </option>
     </select>
-    <div>
-      <label for="priority">Priority</label>
-      <select id="priority" th:field="*{priority}" required>
-        <option th:each="priority : ${priorities}" th:value="${priority}" th:text="${priority}">Priority</option>
-      </select>
-    </div>
+    <label>Reminder Time:</label>
+    <input type="datetime-local" th:field="*{reminderTime}" />
+    <label for="priority">Priority</label>
+    <select id="priority" th:field="*{priority}">
+      <option th:each="priority : ${priorities}" th:value="${priority}" th:text="${priority}">Priority</option>
+    </select>
     <label>Task Status</label>
     <select id="status" name="status">
       <option value="Not started">Not started</option>
@@ -44,6 +48,11 @@
     <button type="submit">Create Task</button>
   </form>
 </div><script th:src="@{/js/theme-toggle.js}"></script>
-
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      document.getElementById("timeZone").value = timeZone;
+  });
+</script>
 </body>
 </html>

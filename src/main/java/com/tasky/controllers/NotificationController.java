@@ -69,6 +69,7 @@ public class NotificationController {
     public String createNotification(@ModelAttribute final Notification notification, @AuthenticationPrincipal final UserDetails userDetails) {
         loggerMan.info("CreateNotification with args: Notif: "+ notification + " UserDetails: " + userDetails);
         final User user = userService.findUserByUsername(userDetails.getUsername());
+
         notification.setUser(user);
         notification.setSendTime(LocalDateTime.now());
         notifService.saveNotification(notification);

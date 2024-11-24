@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+  <meta name="application-server-public-key" th:content="${applicationServerPublicKey}">
   <meta name="_csrf" th:content="${_csrf.token}"/>
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <title>Tasky - Tasks</title>
@@ -28,6 +29,7 @@
           <div class="task-header">
             <span class="priority-label" th:text="${task.priority}"></span>
             <h3 th:text="${task.title}">Task Title</h3>
+            <span th:text="${task.category.name}">Category</span>
           </div>
           <div class="task-body">
             <p>Status:
@@ -41,7 +43,7 @@
               <span th:if="${task.reminderTime != null}" th:text="${#temporals.format(task.reminderTime, 'yyyy-MM-dd HH:mm')}">Reminder Time</span>
               <span th:if="${task.reminderTime == null}">❌</span>
             </p>
-            <p>Category: <span th:text="${task.category != null} ? ${task.category.name} : 'Uncategorized'">Category</span></p>
+
             <div>
               <a href="#" onclick="toggleDescription(this); return false;">Show Description</a>
               <div class="task-desc" style="display: none;" th:text="${task.description}"></div>

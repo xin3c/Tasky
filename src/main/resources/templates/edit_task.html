@@ -17,9 +17,14 @@
   <h2>Edit Task</h2>
   <form th:action="@{/tasks/update}" th:object="${task}" method="post">
     <input type="hidden" th:field="*{id}"/>
+    <input type="hidden" th:field="*{timeZone}" id="timeZone" />
+    <label>Title:</label>
     <input type="text" th:field="*{title}" placeholder="Title" required autofocus/>
+    <label>Description:</label>
     <textarea th:field="*{description}" placeholder="Description"></textarea>
+    <label>Due Date:</label>
     <input type="date" th:field="*{dueDate}" placeholder="Due Date"/>
+    <label>Category:</label>
     <select th:field="*{category.id}">
       <option value="" th:text="'Select Category'"></option>
       <option th:each="category : ${categories}"
@@ -28,6 +33,8 @@
               th:selected="${task.category != null} ? ${category.id == task.category.id} : false">
       </option>
     </select>
+    <label>Reminder Time:</label>
+    <input type="datetime-local" th:field="*{reminderTime}" />
     <label for="priority">Priority</label>
     <select id="priority" th:field="*{priority}">
       <option th:each="priority : ${priorities}" th:value="${priority}" th:text="${priority}">Priority</option>
@@ -41,6 +48,11 @@
     <button type="submit">Update Task</button>
   </form>
 </div><script th:src="@{/js/theme-toggle.js}"></script>
-
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      document.getElementById("timeZone").value = timeZone;
+  });
+</script>
 </body>
 </html>

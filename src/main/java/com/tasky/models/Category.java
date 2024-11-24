@@ -31,7 +31,8 @@ public class Category {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    
+    private String icon_id;
+
     @OneToMany(mappedBy = "category")
     private Set<Task> tasks = new HashSet<>();
 }

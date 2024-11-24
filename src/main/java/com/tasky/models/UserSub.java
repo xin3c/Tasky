@@ -24,8 +24,6 @@ public class UserSub {
     /**
      * Instantiates a new User sub.
      */
-    public UserSub() {
-    }
 
     /**
      * Instantiates a new User sub.
@@ -38,4 +36,7 @@ public class UserSub {
         this.user = user;
     }
 
+    public UserSub() {
+
+    }
 }

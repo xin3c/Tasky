@@ -9,6 +9,7 @@ import com.tasky.services.NotificationService;
 import com.tasky.services.TaskService;
 import com.tasky.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,11 +19,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.tasky.services.TaskService.VALID_STATUSES;
-
+import static com.tasky.controllers.CategoryController.loadIcons;
 
 /**
  * The type Task controller.
@@ -31,6 +34,8 @@ import static com.tasky.services.TaskService.VALID_STATUSES;
 @Controller
 @RequestMapping("/tasks")
 public class TaskController {
+    @Value("${vapid.public.key}")
+    private String publicKeyStr;
 
     @Autowired
     private TaskService taskService;
@@ -88,8 +93,10 @@ public class TaskController {
         taskGroups.add(Map.of("title", "This Week", "tasks", thisWeekTasks));
         taskGroups.add(Map.of("title", "Later", "tasks", laterTasks));
 
+        model.addAttribute("applicationServerPublicKey", publicKeyStr);
         model.addAttribute("taskGroups", taskGroups);
-
+        model.addAttribute("light_icons", loadIcons("classpath:/static/icons/light/*.svg"));
+        model.addAttribute("dark_icons", loadIcons("classpath:/static/icons/dark/*.svg"));
         return "tasks";
     }
 
@@ -121,21 +128,19 @@ public class TaskController {
      * @return the string
      */
     @PostMapping
-    public String createTask(@ModelAttribute("task") final Task task, @AuthenticationPrincipal final UserDetails userDetails) {
+    public String createTask(@ModelAttribute("task") final Task task, @AuthenticationPrincipal final UserDetails userDetails, @RequestParam(value = "timeZone", defaultValue = "UTC") String timeZone) {
         final User user = userService.findUserByUsername(userDetails.getUsername());
         task.setUser(user);
         taskService.createOrUpdateTask(task);
         if (task.getReminderTime() != null) {
             final Notification notification = new Notification();
             notification.setMessage("Task remind: " + task.getTitle());
-            notification.setSendTime(task.getReminderTime());
+            notification.setSendTime(task.getReminderTime().atZone(ZoneId.of(timeZone)).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime());
             notification.setUser(user);
             notification.setTask(task);
             notifService.saveNotification(notification);
         }
         return "redirect:/tasks";
-
-
     }
 
 

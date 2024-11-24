@@ -17,10 +17,57 @@
 <div class="container">
   <h2>Create New Category</h2>
   <form th:action="@{/categories}" th:object="${category}" method="post">
-    <input type="text" th:field="*{name}" placeholder="Category Name" required autofocus/>
+    <div class="category-name">
+      <input type="text" th:field="*{name}" placeholder="Category Name" required autofocus/>
+
+      <img id="selected-icon" src="/icons/dark/5404831.svg" class="selected-icon" alt="Selected Icon" />
+
+      <input type="hidden" th:field="*{icon_id}" id="icon_id" th:value="${light_icons[0]}" />
+    </div>
+
+
+    <div id="icon-grid" class="icon-grid" style="display: none;">
+      <p>Select an icon:</p>
+      <div class="icons">
+        <img th:each="icon : ${light_icons}" th:src="@{/icons/light/} + ${icon}"
+             th:alt="${icon}" class="icon-option" th:attr="data-icon-id=${icon}" />
+      </div>
+    </div>
+
     <button type="submit">Create Category</button>
   </form>
-</div><script th:src="@{/js/theme-toggle.js}"></script>
 
+</div>
+<script th:src="@{/js/theme-toggle.js}"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+    const selectedIcon = document.getElementById('selected-icon');
+    const iconGrid = document.getElementById('icon-grid');
+    const iconIdField = document.getElementById('icon_id');
+
+    selectedIcon.addEventListener('click', () => {
+        iconGrid.style.display = iconGrid.style.display === 'none' ? 'block' : 'none';
+    });
+
+
+    document.querySelectorAll('.icon-option').forEach(icon => {
+        icon.addEventListener('click', () => {
+            const iconSrc = icon.getAttribute('src');
+            const iconId = icon.getAttribute('data-icon-id');
+
+            // Устанавливаем новую иконку в качестве выбранной
+            selectedIcon.src = iconSrc;
+            iconIdField.value = iconId;
+
+            // Закрываем сетку иконок
+            iconGrid.style.display = 'none';
+        });
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!iconGrid.contains(event.target) && event.target !== selectedIcon) {
+            iconGrid.style.display = 'none';
+        }
+    });
+});</script>
 </body>
 </html>

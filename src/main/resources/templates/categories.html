@@ -21,12 +21,15 @@
   <table>
     <thead>
     <tr>
+      <th></th>
       <th>Name</th>
       <th>Actions</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="category : ${categories}">
+      <td><img id="selected-icon" th:src="@{/icons/light/} + ${category.icon_id}" class="selected-icon" alt="Selected Icon" />
+      </td>
       <td th:text="${category.name}">Category Name</td>
       <td>
         <a th:href="@{'/categories/edit/' + ${category.id}}">Edit</a> |
